@@ -5,7 +5,8 @@
 #include <stdbool.h>
 
 #define HASH_IDX_TO_PTR(desc, idx) \
-    ((uint8_t *)((desc)->data) + ((idx) * (desc)->data_size))
+    ((cplus_hashmap_entry_t *)((uint8_t *)((desc)->data) + ((idx) * (desc)->data_size)))
+
 
 bool cplus_hashmap_init(cplus_hashmap_desc_t *desc)
 {
@@ -29,12 +30,12 @@ static void *cplus_hashmap_find_slot(const cplus_hashmap_desc_t *desc,
 
     do
     {
-        uint8_t *entry = HASH_IDX_TO_PTR(desc, current);
-        cplus_hashmap_entry_t *e = (cplus_hashmap_entry_t *)entry;
+ 
+        cplus_hashmap_entry_t *e = HASH_IDX_TO_PTR(desc, current);
 
         if (e->is_valid && e->key == key)
         {
-            return entry; // Found matching key
+            return (void*)(e); // Found matching key
         }
 
         if (for_insert && !e->is_valid && first_empty == size)
@@ -47,7 +48,7 @@ static void *cplus_hashmap_find_slot(const cplus_hashmap_desc_t *desc,
 
     if (for_insert && first_empty != size)
     {
-        return HASH_IDX_TO_PTR(desc, first_empty);
+        return (void*)HASH_IDX_TO_PTR(desc, first_empty);
     }
 
     return NULL; // Not found or no empty slot
