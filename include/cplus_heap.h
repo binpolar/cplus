@@ -17,6 +17,8 @@ typedef struct cplus_heap_desc_t
     uint16_t last_idx;
 } cplus_heap_desc_t;
 
+#define CPLUS_MAX_HEAP_DATA_SIZE 1024
+
 bool cplus_heap_init(cplus_heap_desc_t *desc);
 bool cplus_heap_push(cplus_heap_desc_t *desc, void *element);
 bool cplus_heap_pop(cplus_heap_desc_t *desc, void *out_element);

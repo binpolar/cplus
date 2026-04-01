@@ -19,7 +19,7 @@ static void heap_swap(cplus_heap_desc_t *desc, uint16_t i, uint16_t j)
 {
     cplus_heap_entry_t *a = HEAP_IDX_TO_PTR(desc, i);
     cplus_heap_entry_t *b = HEAP_IDX_TO_PTR(desc, j);
-    uint8_t temp[desc->data_size];
+    uint8_t temp[CPLUS_MAX_HEAP_DATA_SIZE];
 
     memcpy(temp, a, desc->data_size);
     memcpy(a, b, desc->data_size);
@@ -28,10 +28,11 @@ static void heap_swap(cplus_heap_desc_t *desc, uint16_t i, uint16_t j)
 
 bool cplus_heap_init(cplus_heap_desc_t *desc)
 {
-    if (!desc || !desc->data || desc->max_size == 0 || desc->data_size == 0) {
+    if (!desc || !desc->data || desc->max_size == 0 || desc->data_size == 0)
+    {
         return false;
     }
-    
+
     desc->last_idx = 1; // 1-based indexing, 0 means empty
     memset(desc->data, 0, desc->data_size * desc->max_size);
     return true;
@@ -39,9 +40,11 @@ bool cplus_heap_init(cplus_heap_desc_t *desc)
 
 bool cplus_heap_push(cplus_heap_desc_t *desc, void *element)
 {
-    if (!desc || !element) return false;
-    
-    if (desc->last_idx >= desc->max_size) {
+    if (!desc || !element)
+        return false;
+
+    if (desc->last_idx >= desc->max_size)
+    {
         return false; // Heap full
     }
 
@@ -50,16 +53,20 @@ bool cplus_heap_push(cplus_heap_desc_t *desc, void *element)
 
     // Bubble up
     uint16_t idx = desc->last_idx;
-    
-    while (idx > 1) {
+
+    while (idx > 1)
+    {
         uint16_t parent_idx = HEAP_GET_PARENT_IDX(idx);
         void *current = HEAP_IDX_TO_PTR(desc, idx);
         void *parent = HEAP_IDX_TO_PTR(desc, parent_idx);
 
-        if (get_cost(current) < get_cost(parent)) {
+        if (get_cost(current) < get_cost(parent))
+        {
             heap_swap(desc, idx, parent_idx);
             idx = parent_idx;
-        } else {
+        }
+        else
+        {
             break;
         }
     }
@@ -70,9 +77,11 @@ bool cplus_heap_push(cplus_heap_desc_t *desc, void *element)
 
 bool cplus_heap_pop(cplus_heap_desc_t *desc, void *out_element)
 {
-    if (!desc || !out_element) return false;
-    
-    if (desc->last_idx <= 1) {
+    if (!desc || !out_element)
+        return false;
+
+    if (desc->last_idx <= 1)
+    {
         return false; // Heap empty
     }
 
@@ -83,49 +92,57 @@ bool cplus_heap_pop(cplus_heap_desc_t *desc, void *out_element)
     // Move last element to root
     desc->last_idx--;
     void *last = HEAP_IDX_TO_PTR(desc, desc->last_idx);
-    
-    if (desc->last_idx > 1) { // Only copy if there are remaining elements
+
+    if (desc->last_idx > 1)
+    { // Only copy if there are remaining elements
         memcpy(root, last, desc->data_size);
 
         // Bubble down
         uint16_t idx = 1;
-        
-        while (1) {
+
+        while (1)
+        {
             uint16_t left_idx = HEAP_GET_LEFT_CHILD_IDX(idx);
             uint16_t right_idx = HEAP_GET_RIGHT_CHILD_IDX(idx);
             uint16_t smallest = idx;
-            
+
             uint32_t current_cost = get_cost(HEAP_IDX_TO_PTR(desc, idx));
 
             // Check left child
-            if (left_idx < desc->last_idx) {
+            if (left_idx < desc->last_idx)
+            {
                 void *left = HEAP_IDX_TO_PTR(desc, left_idx);
                 uint32_t left_cost = get_cost(left);
-                if (left_cost < current_cost) {
+                if (left_cost < current_cost)
+                {
                     smallest = left_idx;
                 }
             }
 
-            uint32_t smallest_cost = (smallest == idx) ? current_cost : 
-                                     get_cost(HEAP_IDX_TO_PTR(desc, smallest));
-            
-            if (right_idx < desc->last_idx) {
+            uint32_t smallest_cost = (smallest == idx) ? current_cost : get_cost(HEAP_IDX_TO_PTR(desc, smallest));
+
+            if (right_idx < desc->last_idx)
+            {
                 void *right = HEAP_IDX_TO_PTR(desc, right_idx);
                 uint32_t right_cost = get_cost(right);
-                if (right_cost < smallest_cost) {
+                if (right_cost < smallest_cost)
+                {
                     smallest = right_idx;
                 }
             }
 
-            if (smallest != idx) {
+            if (smallest != idx)
+            {
                 heap_swap(desc, idx, smallest);
                 idx = smallest;
-            } else {
+            }
+            else
+            {
                 break;
             }
         }
     }
-    
+
     return true;
 }
 
@@ -136,7 +153,8 @@ bool cplus_heap_empty(const cplus_heap_desc_t *desc)
 
 void cplus_heap_reset(cplus_heap_desc_t *desc)
 {
-    if (desc) {
+    if (desc)
+    {
         desc->last_idx = 1;
         memset(desc->data, 0, desc->data_size * desc->max_size);
     }
