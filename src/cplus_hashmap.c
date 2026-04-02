@@ -7,7 +7,6 @@
 #define HASH_IDX_TO_PTR(desc, idx) \
     ((cplus_hashmap_entry_t *)((uint8_t *)((desc)->data) + ((idx) * (desc)->data_size)))
 
-
 bool cplus_hashmap_init(cplus_hashmap_desc_t *desc)
 {
     if (!desc || !desc->data || desc->data_length == 0)
@@ -30,12 +29,12 @@ static void *cplus_hashmap_find_slot(const cplus_hashmap_desc_t *desc,
 
     do
     {
- 
+
         cplus_hashmap_entry_t *e = HASH_IDX_TO_PTR(desc, current);
 
         if (e->is_valid && e->key == key)
         {
-            return (void*)(e); // Found matching key
+            return (void *)(e); // Found matching key
         }
 
         if (for_insert && !e->is_valid && first_empty == size)
@@ -48,7 +47,7 @@ static void *cplus_hashmap_find_slot(const cplus_hashmap_desc_t *desc,
 
     if (for_insert && first_empty != size)
     {
-        return (void*)HASH_IDX_TO_PTR(desc, first_empty);
+        return (void *)HASH_IDX_TO_PTR(desc, first_empty);
     }
 
     return NULL; // Not found or no empty slot
