@@ -60,7 +60,7 @@ void *cplus_hashmap_get(const cplus_hashmap_desc_t *desc, uint32_t key)
     return cplus_hashmap_find_slot(desc, key, false);
 }
 
-bool cplus_hashmap_put(cplus_hashmap_desc_t *desc, void *value)
+void *cplus_hashmap_put(cplus_hashmap_desc_t *desc, void *value)
 {
     if (!desc || !value)
         return false;
@@ -72,10 +72,10 @@ bool cplus_hashmap_put(cplus_hashmap_desc_t *desc, void *value)
     {
         memcpy(slot, value, desc->data_size);
         ((cplus_hashmap_entry_t *)slot)->is_valid = 1;
-        return true;
+        return slot;
     }
 
-    return false; // Table full
+    return NULL; // Table full
 }
 
 bool cplus_hashmap_exists(const cplus_hashmap_desc_t *desc, uint32_t key)

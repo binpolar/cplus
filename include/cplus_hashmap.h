@@ -23,7 +23,7 @@ bool cplus_hashmap_init(cplus_hashmap_desc_t *desc);
 
 bool cplus_hashmap_full();
 void *cplus_hashmap_get(const cplus_hashmap_desc_t *desc, uint32_t key);
-bool cplus_hashmap_put(cplus_hashmap_desc_t *desc, void *value);
+void *cplus_hashmap_put(cplus_hashmap_desc_t *desc, void *value);
 bool cplus_hashmap_remove(cplus_hashmap_desc_t *desc, uint32_t key);
 bool cplus_hashmap_exists(const cplus_hashmap_desc_t *desc, uint32_t key);
 
