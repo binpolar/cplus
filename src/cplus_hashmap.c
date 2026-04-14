@@ -63,7 +63,7 @@ void *cplus_hashmap_get(const cplus_hashmap_desc_t *desc, uint32_t key)
 void *cplus_hashmap_put(cplus_hashmap_desc_t *desc, void *value)
 {
     if (!desc || !value)
-        return false;
+        return NULL;
 
     cplus_hashmap_entry_t *val = (cplus_hashmap_entry_t *)value;
     void *slot = cplus_hashmap_find_slot(desc, val->key, true);
